@@ -51,7 +51,7 @@ import com.qualcomm.robotcore.util.Range;
  */
 
 @TeleOp(name="Basic: Linear OpMode", group="Linear Opmode")
-@Disabled
+//@Disabled
 public class lby_Linear extends LinearOpMode {
 
     // Declare OpMode members.
@@ -98,9 +98,9 @@ public class lby_Linear extends LinearOpMode {
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
             double drive = -gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive + turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive - turn, -1.0, 1.0) ;
+            double turn  = gamepad1.right_stick_x;
+            leftPower    = Range.clip(drive - turn, -1.0, 1.0) ;
+            rightPower   = Range.clip(drive + turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -119,11 +119,17 @@ public class lby_Linear extends LinearOpMode {
                 runTime(100, 0.5);
             }
 
+            double ticks = 288;
+            double wheelRadius = 4.5;
+            double pi = 3.14;
+            double encoderValue = (l1.getCurrentPosition()+l2.getCurrentPosition())/2;
+            double metricValue = -encoderValue/ticks*2*pi*wheelRadius;
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
-            telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
-            telemetry.addData("Encoder", "left (%.2f), right (%.2f)", l1.getCurrentPosition(), r1.getCurrentPosition());
-            telemetry.addData("编码器", "left (%.2f), right (%.2f)", l1.getCurrentPosition(), r1.getCurrentPosition());
+            //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
+            telemetry.addData("Encoder", "value (%.2f)", encoderValue);
+            telemetry.addData("Metric", "(%.2f)", metricValue);
             telemetry.update();
         }
     }
