@@ -123,6 +123,7 @@ public class lby_Linear extends LinearOpMode {
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
             telemetry.addData("Encoder", "left (%.2f), right (%.2f)", l1.getCurrentPosition(), r1.getCurrentPosition());
+            telemetry.addData("编码器", "left (%.2f), right (%.2f)", l1.getCurrentPosition(), r1.getCurrentPosition());
             telemetry.update();
         }
     }
