@@ -90,18 +90,58 @@ public class lby_Linear extends LinearOpMode {
         while (opModeIsActive()) {
 
             // Setup a variable for each drive wheel to save power level for telemetry
-            double leftPower;
-            double rightPower;
+            //double leftPower;
+            //double rightPower;
+
+            double drive  = -gamepad1.left_stick_y * 0.8;
+            double strafe = gamepad1.left_stick_x * 0.8;
+            double twist  = gamepad1.right_stick_x * 0.5;
+
+            if(Math.abs(drive) < 0.1)   drive = 0;
+            if(Math.abs(strafe) < 0.1)   strafe = 0;
+            if(Math.abs(twist) < 0.1)   twist = 0;
+
+
+            if(gamepad1.right_bumper)
+            {
+                drive = 0.5 * drive;
+                strafe = 0.5 * strafe;
+                twist = 0.5 * twist;
+
+            }
+
+
+            double[] speeds = {
+                    (drive + strafe + twist),
+                    (drive - strafe - twist),
+                    (drive - strafe + twist),
+                    (drive + strafe - twist)
+            };
+
+            double max = Math.abs(speeds[0]);
+
+            for(int i = 0; i < speeds.length; i++) {
+                if ( max < Math.abs(speeds[i]) ) max = Math.abs(speeds[i]);
+            }
+
+            if (max > 1) {
+                for (int i = 0; i < speeds.length; i++) speeds[i] /= max;
+            }
+
+            l1.setPower(speeds[0]);
+            r1.setPower(speeds[1]);
+            l2.setPower(speeds[2]);
+            r2.setPower(speeds[3]);
 
             // Choose to drive using either Tank Mode, or POV Mode
             // Comment out the method that's not used.  The default below is POV.
 
             // POV Mode uses left stick to go forward, and right stick to turn.
             // - This uses basic math to combine motions and is easier to drive straight.
-            double drive = -gamepad1.left_stick_y;
-            double turn  = gamepad1.right_stick_x;
-            leftPower    = Range.clip(drive - turn, -1.0, 1.0) ;
-            rightPower   = Range.clip(drive + turn, -1.0, 1.0) ;
+//            double drive = -gamepad1.left_stick_y;
+//            double turn  = -gamepad1.right_stick_x * 0.4;
+//            leftPower    = Range.clip(drive - turn, -1.0, 1.0) ;
+//            rightPower   = Range.clip(drive + turn, -1.0, 1.0) ;
 
             // Tank Mode uses one stick to control each wheel.
             // - This requires no math, but it is hard to drive forward slowly and keep straight.
@@ -109,10 +149,7 @@ public class lby_Linear extends LinearOpMode {
             // rightPower = -gamepad1.right_stick_y ;
 
             // Send calculated power to wheels
-            l1.setPower(leftPower);
-            r1.setPower(rightPower);
-            l2.setPower(leftPower);
-            r2.setPower(rightPower);
+
 
 
 
