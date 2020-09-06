@@ -163,6 +163,7 @@ public class lby_Linear extends LinearOpMode {
             double encoderValue = (l1.getCurrentPosition()+l2.getCurrentPosition())/2;
             double metricValue = -encoderValue/ticks*2*pi*wheelRadius;
 
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.toString());
             //telemetry.addData("Motors", "left (%.2f), right (%.2f)", leftPower, rightPower);
